@@ -6,7 +6,7 @@
 /*   By: Vtrentos <Vtrentos@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/02 18:20:11 by Vtrentos      #+#    #+#                 */
-/*   Updated: 2021/03/04 12:23:09 by Vtrentos      ########   odam.nl         */
+/*   Updated: 2021/03/09 11:09:26 by Vtrentos      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ char	*finalize_line_prepare_buf(char *temp, char *buf, char *line)
 		i++;
 	final_line = (char *)malloc(i + 1);
 	if (!final_line)
+	{
+		free(line);
 		return (NULL);
+	}
 	ft_strlcpy(final_line, line, i + 1);
 	if (line)
 		free(line);
@@ -71,7 +74,10 @@ char	*realloc_and_copy_line(char *line, char *temp, size_t buf_size)
 	new_line_len = line_len + buf_size;
 	new_line = (char *)malloc(new_line_len);
 	if (!new_line)
+	{
+		free(line);
 		return (NULL);
+	}
 	ft_strlcpy(new_line, line, line_len + 1);
 	while (new_line[i])
 		i++;
@@ -121,6 +127,8 @@ int	get_next_line(int fd, char **line)
 		while (buf[i] != '\n' && buf[i] != '\0')
 			i++;
 		*line = (char *)malloc(i + 1);
+		if (!*line)
+			return (-1);
 		ft_strlcpy(*line, &buf[0], i + 1);
 		ft_memcpy(&buf[0], &buf[i + 1], BUFFER_SIZE - i);
 		return (1);
